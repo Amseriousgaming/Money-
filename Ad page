@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Page</title>
+<style>
+:root{--bg:#f6f4ef;--ink:#1d1b16;--mute:#6b665a;--card:#fff;--line:#e2ded2;--accent:#0b6e4f}
+@media (prefers-color-scheme: dark){:root{--bg:#15140f;--ink:#f1eee4;--mute:#a09a88;--card:#1e1c15;--line:#34311f;--accent:#4cc79b}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.6}
+main{max-width:640px;margin:0 auto;padding:18px 16px 40px}
+h1{font-size:1.7rem;line-height:1.2;margin:18px 0 8px}
+p{margin:0 0 14px}
+.sub{color:var(--mute)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin:18px 0}
+.card h2{font-size:1.15rem;margin:0 0 6px}
+a{color:var(--accent)}
+.slot{display:flex;justify-content:center;align-items:center;margin:16px auto;overflow:hidden;max-width:100%}
+.slot.banner{min-height:50px}
+.slot.box{min-height:250px}
+.note{font-size:.75rem;color:var(--mute);text-align:center;margin:0}
+</style>
+</head>
+<body>
+<main>
+
+  <!-- AD SLOT 1: 320x50 banner. Replace the whole comment line below with your Adsterra 320x50 code. -->
+  <p class="note">Advertisement</p>
+  <div class="slot banner">
+    <!-- PASTE ADSTERRA 320x50 CODE HERE -->
+  </div>
+
+  <h1>Write your page title here</h1>
+  <p class="sub">One line about what visitors will find on this page.</p>
+
+  <section class="card">
+    <h2>First topic</h2>
+    <p>Write something useful for your followers here: news, tips, updates, videos or links. Pages with real content are the ones ad networks approve and pay for.</p>
+  </section>
+
+  <!-- AD SLOT 2: 300x250 box. Replace the comment line below with your Adsterra 300x250 code. -->
+  <p class="note">Advertisement</p>
+  <div class="slot box">
+    <!-- PASTE ADSTERRA 300x250 CODE HERE -->
+  </div>
+
+  <section class="card">
+    <h2>Second topic</h2>
+    <p>Add more content here. The longer people stay and read, the better the page works for everyone.</p>
+  </section>
+
+</main>
+</body>
+</html>
