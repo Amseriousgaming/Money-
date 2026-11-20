@@ -1,54 +1,204 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Page</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Sentinel Command Center</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&display=swap">
 <style>
-:root{--bg:#f6f4ef;--ink:#1d1b16;--mute:#6b665a;--card:#fff;--line:#e2ded2;--accent:#0b6e4f}
-@media (prefers-color-scheme: dark){:root{--bg:#15140f;--ink:#f1eee4;--mute:#a09a88;--card:#1e1c15;--line:#34311f;--accent:#4cc79b}}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.6}
-main{max-width:640px;margin:0 auto;padding:18px 16px 40px}
-h1{font-size:1.7rem;line-height:1.2;margin:18px 0 8px}
-p{margin:0 0 14px}
-.sub{color:var(--mute)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin:18px 0}
-.card h2{font-size:1.15rem;margin:0 0 6px}
-.slot{display:flex;justify-content:center;align-items:center;margin:8px auto 16px;min-height:250px;max-width:100%;overflow:hidden}
-.note{font-size:.75rem;color:var(--mute);text-align:center;margin:0}
+:root{--bg:#eef2f7;--pn:#ffffff;--pn2:#e6ecf4;--tx:#0e1b2c;--mu:#56657d;--bd:#cfd8e6;--ok:#0f8f6a;--wn:#b9770a;--al:#c62828;--ac:#0b7c9c;--tint:var(--ok);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1626;--pn:#13233a;--pn2:#1a2f4c;--tx:#e8eff9;--mu:#8fa3bf;--bd:#27405f;--ok:#2fd1a0;--wn:#ffb02e;--al:#ff5a5a;--ac:#38c6e8}}
+:root[data-theme="dark"]{--bg:#0c1626;--pn:#13233a;--pn2:#1a2f4c;--tx:#e8eff9;--mu:#8fa3bf;--bd:#27405f;--ok:#2fd1a0;--wn:#ffb02e;--al:#ff5a5a;--ac:#38c6e8}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;border:1px solid var(--bd);background:var(--pn);border-radius:10px;padding:10px 14px;min-height:44px}
+button:focus-visible,input:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.num{font-family:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;font-weight:600;letter-spacing:.01em}
+#login{min-height:80vh;display:flex;align-items:center;justify-content:center;padding:20px}
+#login form{width:100%;max-width:360px;background:var(--pn);border:1px solid var(--bd);border-radius:16px;padding:24px;display:grid;gap:12px}
+#login h1{margin:0;font-size:26px;font-family:"IBM Plex Sans Condensed",system-ui,sans-serif;font-weight:700}
+#login p{margin:0;color:var(--mu)}
+input{width:100%;padding:12px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);min-height:44px}
+.pri{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:600}
+#app{display:none;max-width:720px;margin:0 auto;padding:12px 14px 40px}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 0 12px}
+header h2{margin:0;font-size:19px;font-family:"IBM Plex Sans Condensed",system-ui,sans-serif;font-weight:700}
+.conn{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--mu)}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--mu)}
+.conn.live .dot{background:var(--ok)}.conn.off .dot{background:var(--al)}.conn.demo .dot{background:var(--wn)}
+#hero{border-radius:18px;padding:18px;background:color-mix(in srgb,var(--tint) 18%,var(--pn));border:2px solid var(--tint);transition:background .4s,border-color .4s}
+#hero.alert{animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{background:color-mix(in srgb,var(--tint) 34%,var(--pn))}}
+@media (prefers-reduced-motion:reduce){#hero.alert{animation:none}}
+#hstat{font-size:40px;line-height:1.05;margin:0;color:var(--tint)}
+#hmsg{margin:6px 0 12px;font-size:16px}
+.src{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;padding:0;list-style:none}
+.src li{padding:5px 10px;border-radius:99px;background:var(--pn);border:1px solid var(--bd);font-size:13px;color:var(--mu)}
+.src li.on{border-color:var(--tint);color:var(--tx);font-weight:600}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+h3{font-size:16px;margin:22px 0 8px;font-weight:600}
+.cam{position:relative;border-radius:14px;overflow:hidden;background:#05090f;border:1px solid var(--bd);aspect-ratio:16/9}
+.cam canvas,.cam img{width:100%;height:100%;display:block;object-fit:cover}
+#camnote{position:absolute;inset:auto 8px 8px 8px;font-size:13px;color:#fff;background:rgba(0,0,0,.55);padding:4px 8px;border-radius:8px;display:none}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.tile{background:var(--pn);border:1px solid var(--bd);border-radius:14px;padding:12px;border-left:5px solid var(--ok)}
+.tile.warn{border-left-color:var(--wn)}.tile.alert{border-left-color:var(--al)}
+.tile small{color:var(--mu);display:block}
+.tile b{font-size:30px;line-height:1.1}
+.tile span{font-size:13px;color:var(--mu);margin-left:3px}
+.tile canvas{width:100%;height:30px;display:block;margin-top:4px}
+#log{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+#log li{background:var(--pn);border:1px solid var(--bd);border-radius:10px;padding:8px 12px;font-size:14px}
+#log time{color:var(--mu);margin-right:8px;font-size:13px}
+#log li.l2{border-left:4px solid var(--al)}#log li.l1{border-left:4px solid var(--wn)}
+details{background:var(--pn);border:1px solid var(--bd);border-radius:14px;padding:6px 14px;margin-top:22px}
+summary{min-height:44px;display:flex;align-items:center;font-weight:600;cursor:pointer}
+label{display:grid;gap:4px;margin:10px 0;color:var(--mu);font-size:14px}
+pre{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:10px;overflow-x:auto;font-size:12.5px}
+.warnbox{background:color-mix(in srgb,var(--wn) 15%,var(--pn));border:1px solid var(--wn);border-radius:10px;padding:8px 12px;font-size:14px;display:none}
+.seg{display:flex;gap:8px}.seg button[aria-pressed="true"]{background:var(--ac);color:#fff;border-color:var(--ac)}
 </style>
 </head>
 <body>
-<main>
+<section id="login">
+<form id="lf" autocomplete="off">
+<h1>AI Sentinel Command Center</h1>
+<p>Sign in as an authorised operator.</p>
+<label>Operator name<input id="u" value="" autocapitalize="none" autocomplete="username"></label>
+<label>PIN<input id="p" type="password" inputmode="numeric" autocomplete="current-password"></label>
+<div id="lerr" role="alert" style="color:var(--al);min-height:20px"></div>
+<button class="pri" type="submit">Sign in</button>
+<p style="font-size:13px">Demo sign-in for the exhibition: admin / 1234 (change it at the top of the script).</p>
+</form>
+</section>
 
-  <p class="note">Advertisement</p>
-  <div class="slot">
-    <script>
-      atOptions = {
-        'key' : '38957de87879d059f0842f894acda88b',
-        'format' : 'iframe',
-        'height' : 250,
-        'width' : 300,
-        'params' : {}
-      };
-    </script>
-    <script src="https://bicea.org/22/38957de87879d059f0842f894acda88b"></script>
-  </div>
+<main id="app">
+<header>
+<h2>AI Sentinel</h2>
+<div class="row" style="align-items:center">
+<span id="conn" class="conn demo"><i class="dot"></i><span id="connt">Demo data</span></span>
+<button id="out" type="button">Sign out</button>
+</div>
+</header>
 
-  <h1>Write your page title here</h1>
-  <p class="sub">One line about what visitors will find on this page.</p>
+<section id="hero" aria-live="polite">
+<p id="hstat" class="num">All clear</p>
+<p id="hmsg">All sensors are normal.</p>
+<ul class="src" id="src"></ul>
+<div class="row" id="acts"></div>
+</section>
 
-  <section class="card">
-    <h2>First topic</h2>
-    <p>Write something useful for your followers here: news, tips, updates, videos or links. Pages with real content are the ones ad networks approve and pay for.</p>
-  </section>
+<h3>Camera</h3>
+<div class="cam"><canvas id="cv" width="640" height="360"></canvas><img id="img" alt="Live camera" hidden><div id="camnote"></div></div>
 
-  <section class="card">
-    <h2>Second topic</h2>
-    <p>Add more content here. The longer people stay and read, the better the page works for everyone.</p>
-  </section>
+<h3>Sensors</h3>
+<div class="grid" id="tiles"></div>
 
+<h3>Incident log</h3>
+<ul id="log"></ul>
+
+<details id="demoBox"><summary>Demo controls</summary>
+<p style="color:var(--mu);margin:4px 0 10px">Trigger a disaster to show how the system detects, verifies and warns.</p>
+<div class="row" style="padding-bottom:10px">
+<button data-sim="fire" type="button">Fire</button><button data-sim="flood" type="button">Flood</button><button data-sim="quake" type="button">Earthquake</button><button data-sim="gas" type="button">Gas leak</button><button data-sim="" type="button">Reset</button>
+</div></details>
+
+<details><summary>Connect the Arduino dev kit</summary>
+<div class="seg" role="group" aria-label="Data source">
+<button id="mDemo" type="button" aria-pressed="true">Demo data</button><button id="mLive" type="button" aria-pressed="false">Live device</button>
+</div>
+<label>Device address<input id="durl" placeholder="http://192.168.1.50 or ws://192.168.1.50:81" inputmode="url" autocapitalize="none"></label>
+<label>Camera stream address<input id="curl" placeholder="http://192.168.1.51:81/stream" inputmode="url" autocapitalize="none"></label>
+<div class="warnbox" id="mixed">This page is on https, so the browser blocks http device addresses. Open this file from your phone’s storage, or host it on the device’s own network.</div>
+<button class="pri" id="save" type="button">Save and connect</button>
+<p style="color:var(--mu);font-size:14px">The dashboard reads <b>GET /data</b> (or WebSocket messages) with this JSON. Missing fields are ignored.</p>
+<pre>{"temp":28.5,"smoke":120,"gas":300,"water":12,"vib":0.02,"rain":2,"camFire":false}</pre>
+<p style="color:var(--mu);font-size:14px">The siren button calls <b>GET /siren?on=1</b> and <b>/siren?on=0</b> on the device.</p>
+</details>
 </main>
+
+<script>
+const CFG={user:'admin',pin:'1234'};
+const $=id=>document.getElementById(id);
+const SENS=[
+{k:'temp',n:'Temperature',u:'°C',w:45,a:60,d:1},{k:'smoke',n:'Smoke',u:'ppm',w:300,a:600,d:0},
+{k:'gas',n:'Gas',u:'ppm',w:400,a:800,d:0},{k:'water',n:'Water level',u:'cm',w:40,a:70,d:0},
+{k:'vib',n:'Ground vibration',u:'g',w:.15,a:.4,d:2},{k:'rain',n:'Rainfall',u:'mm/h',w:30,a:60,d:0}];
+const BASE={temp:27,smoke:60,gas:120,water:8,vib:.02,rain:2};
+let S={mode:'demo',url:'',cam:''};
+try{Object.assign(S,JSON.parse(localStorage.getItem('sentinel_cfg')||'{}'))}catch(e){}
+let D=Object.assign({camFire:false},BASE),H={};SENS.forEach(s=>H[s.k]=Array(40).fill(BASE[s.k]));
+let sim=null,approved=false,sirenOn=false,lastLvl=0,logs=[],ws=null,connOk=false;
+const col=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function stamp(){return new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'})}
+function log(m,l){logs.unshift({t:stamp(),m,l:l||0});logs=logs.slice(0,8);$('log').innerHTML=logs.map(x=>'<li class="l'+x.l+'"><time>'+x.t+'</time>'+x.m+'</li>').join('')}
+// sign in
+let authed=false;try{authed=sessionStorage.getItem('sentinel_auth')==='1'}catch(e){}
+function show(){$('login').style.display=authed?'none':'flex';$('app').style.display=authed?'block':'none'}
+$('lf').addEventListener('submit',e=>{e.preventDefault();if($('u').value.trim().toLowerCase()===CFG.user&&$('p').value===CFG.pin){authed=true;try{sessionStorage.setItem('sentinel_auth','1')}catch(x){}$('lerr').textContent='';show();log('Operator '+CFG.user+' signed in')}else $('lerr').textContent='Wrong name or PIN. Try again.'});
+$('out').onclick=()=>{authed=false;try{sessionStorage.removeItem('sentinel_auth')}catch(e){}show()};
+// tiles
+$('tiles').innerHTML=SENS.map(s=>'<div class="tile" id="t_'+s.k+'"><small>'+s.n+'</small><b class="num" id="v_'+s.k+'">0</b><span>'+s.u+'</span><canvas width="200" height="30" id="s_'+s.k+'"></canvas></div>').join('');
+function spark(c,a,color){const x=c.getContext('2d'),w=c.width,h=c.height;x.clearRect(0,0,w,h);const mn=Math.min(...a),mx=Math.max(...a,mn+1e-6);x.strokeStyle=color;x.lineWidth=2;x.beginPath();a.forEach((v,i)=>{const px=i/(a.length-1)*w,py=h-2-(v-mn)/(mx-mn)*(h-5);i?x.lineTo(px,py):x.moveTo(px,py)});x.stroke()}
+// hazards with multi-source verification
+function level(v,s){return v>=s.a?2:v>=s.w?1:0}
+function evaluate(){const L={};SENS.forEach(s=>L[s.k]=level(D[s.k],s));
+ const hz=[
+ {n:'Fire',src:[['Camera',D.camFire?2:0],['Smoke',L.smoke],['Temperature',L.temp]]},
+ {n:'Flood',src:[['Water level',L.water],['Rainfall',L.rain]]},
+ {n:'Earthquake',src:[['Ground vibration',L.vib]]},
+ {n:'Gas leak',src:[['Gas sensor',L.gas]]}];
+ let best={lvl:0,hz:null,agree:0,total:1};
+ hz.forEach(h=>{const ag=h.src.filter(q=>q[1]>0).length,mx=Math.max(...h.src.map(q=>q[1]));let lv=0;if(ag>=1)lv=1;if(mx==2&&(ag>=2||h.src.length==1))lv=2;if(lv>best.lvl||(lv==best.lvl&&lv>0&&ag>best.agree))best={lvl:lv,hz:h,agree:ag,total:h.src.length}});
+ return{L,best,hz}}
+function render(){const {L,best}=evaluate();const lv=best.lvl;
+ SENS.forEach(s=>{const t=$('t_'+s.k);t.className='tile'+(L[s.k]==2?' alert':L[s.k]==1?' warn':'');$('v_'+s.k).textContent=(+D[s.k]).toFixed(s.d);H[s.k].push(+D[s.k]);H[s.k].shift();spark($('s_'+s.k),H[s.k],col(L[s.k]==2?'--al':L[s.k]==1?'--wn':'--ac'))});
+ const hero=$('hero');hero.className=lv==2?'alert':'';hero.style.setProperty('--tint','var('+(lv==2?'--al':lv==1?'--wn':'--ok')+')');
+ const conf=lv?Math.min(99,Math.round(40+best.agree*22+(lv==2?14:0))):0;
+ if(!lv){$('hstat').textContent='All clear';$('hmsg').textContent='All sensors are normal.';$('src').innerHTML='';approved=false;if(sirenOn)setSiren(false)}
+ else{$('hstat').textContent=(lv==2?'Alert: ':'Warning: ')+best.hz.n;$('hmsg').textContent=(best.agree+' of '+best.total+' sources agree. Confidence '+conf+'%.')+(lv==2&&!approved?' Waiting for operator approval.':lv==2?' Citizens are being warned.':'');
+  $('src').innerHTML=best.hz.src.map(q=>'<li class="'+(q[1]?'on':'')+'">'+q[0]+(q[1]?' detected':' normal')+'</li>').join('')}
+ const a=$('acts');let h='';if(lv==2&&!approved)h='<button class="pri" id="bA" type="button">Approve and warn citizens</button>';else if(approved||sirenOn)h='<button id="bS" type="button">'+(sirenOn?'Stop siren':'Start siren')+'</button><button id="bD" type="button">Stand down</button>';
+ if(a.dataset.h!==h){a.innerHTML=h;a.dataset.h=h;if($('bA'))$('bA').onclick=()=>{approved=true;setSiren(true);log('Operator approved. Siren on, citizens notified by SMS and app.',2);render()};if($('bS'))$('bS').onclick=()=>{setSiren(!sirenOn);render()};if($('bD'))$('bD').onclick=()=>{approved=false;setSiren(false);sim=null;log('Operator stood down the alert.');render()}}
+ if(lv!==lastLvl){if(lv==1)log('Warning: '+best.hz.n+' signs detected ('+best.agree+' of '+best.total+' sources).',1);if(lv==2)log('Alert: '+best.hz.n+' verified at '+conf+'% confidence. Operator review needed.',2);lastLvl=lv}
+ const c=$('conn');c.className='conn '+(S.mode=='demo'?'demo':connOk?'live':'off');$('connt').textContent=S.mode=='demo'?'Demo data':connOk?'Live device':'Device offline'}
+// siren
+let actx,osc,sirT;
+function setSiren(on){if(on===sirenOn)return;sirenOn=on;try{if(on){actx=actx||new (window.AudioContext||window.webkitAudioContext)();osc=actx.createOscillator();const g=actx.createGain();g.gain.value=.07;osc.type='sawtooth';osc.connect(g);g.connect(actx.destination);osc.start();sirT=setInterval(()=>{osc.frequency.value=650+Math.abs(Math.sin(Date.now()/420))*550},60)}else{clearInterval(sirT);if(osc)osc.stop();osc=null}}catch(e){}
+ if(S.mode=='live'&&S.url&&/^https?:/.test(S.url))fetch(S.url.replace(/\/$/,'')+'/siren?on='+(on?1:0),{mode:'no-cors'}).catch(()=>{})}
+// demo data
+function demoStep(){const t=sim?(Date.now()-sim.t0)/1000:0;const tg=Object.assign({},BASE);
+ if(sim){if(sim.type=='fire'){tg.temp=78;tg.smoke=780}if(sim.type=='flood'){tg.water=85;tg.rain=75}if(sim.type=='quake'){tg.vib=.55}if(sim.type=='gas'){tg.gas=900}}
+ SENS.forEach(s=>{const n=(Math.random()-.5)*(s.k=='vib'?.01:s.k=='temp'?.6:s.a*.012);let v=D[s.k]+(tg[s.k]-D[s.k])*(sim?.2:.3)+n;if(sim&&sim.type=='quake'&&s.k=='vib'&&t>1.5)v=tg.vib*(.5+Math.random()*.7);D[s.k]=Math.max(0,v)});
+ D.camFire=!!(sim&&sim.type=='fire'&&t>4);if(sim&&t>60)sim=null}
+document.querySelectorAll('[data-sim]').forEach(b=>b.onclick=()=>{const ty=b.dataset.sim;sim=ty?{type:ty,t0:Date.now()}:null;approved=false;if(!ty&&sirenOn)setSiren(false);log(ty?'Demo: '+b.textContent.toLowerCase()+' simulated.':'Demo reset.')});
+// camera
+const cx=$('cv').getContext('2d');
+function cam(ts){requestAnimationFrame(cam);if(!authed||(S.mode=='live'&&S.cam))return;const w=640,h=360,t=ts/1000;
+ const sh=(sim&&sim.type=='quake'&&D.vib>.15)?(Math.random()-.5)*7:0;cx.save();cx.translate(sh,sh);
+ const g=cx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#050b18');g.addColorStop(1,'#0c2a22');cx.fillStyle=g;cx.fillRect(-10,-10,w+20,h+20);
+ cx.fillStyle='#dfe8ff';cx.beginPath();cx.arc(70,60,16,0,6.3);cx.fill();
+ for(let i=0;i<20;i++){const x=i*36-10,y=250+(i%3)*14;cx.fillStyle=i%2?'#0a3a22':'#0d4a2a';cx.beginPath();cx.moveTo(x,y-90-(i%4)*12);cx.lineTo(x-34,y);cx.lineTo(x+34,y);cx.fill()}
+ cx.fillStyle='#071a12';cx.fillRect(-10,262,w+20,h);
+ if(D.water>=25){const wy=h-Math.min(1,D.water/90)*120;cx.fillStyle='rgba(40,120,220,.7)';cx.fillRect(-10,wy+Math.sin(t*3)*3,w+20,h);}
+ if(D.camFire){for(let i=0;i<34;i++){const p=((t*.9+i/34)%1),x=420+Math.sin(i*7.1+t)*46*(1-p*.5),y=262-p*140,r=(1-p)*28+4;cx.fillStyle='rgba(255,'+Math.round(90+110*(1-p))+',30,'+((1-p)*.75)+')';cx.beginPath();cx.arc(x,y,r,0,6.3);cx.fill()}
+  if(Math.floor(t*3)%2){cx.strokeStyle='#ff4b4b';cx.lineWidth=4;cx.strokeRect(335,95,190,185)}cx.fillStyle='#ff4b4b';cx.font='bold 18px sans-serif';cx.fillText('AI camera: fire detected',335,86)}
+ cx.restore();cx.fillStyle='#38ff9a';cx.font='bold 15px sans-serif';cx.fillText('Live  Watch tower camera 07',14,26);cx.fillStyle='#fff';cx.fillText(new Date().toLocaleTimeString(),w-100,26)}
+requestAnimationFrame(cam);
+// live device
+function connect(){if(ws){try{ws.close()}catch(e){}ws=null}connOk=false;if(S.mode!='live'||!S.url)return;if(/^wss?:/.test(S.url)){try{ws=new WebSocket(S.url);ws.onopen=()=>{connOk=true};ws.onclose=()=>{connOk=false};ws.onmessage=e=>{try{Object.assign(D,JSON.parse(e.data));connOk=true}catch(x){}}}catch(x){}}}
+async function poll(){if(S.mode!='live'||!S.url||/^wss?:/.test(S.url))return;try{const r=await fetch(S.url.replace(/\/$/,'')+'/data',{cache:'no-store'});Object.assign(D,await r.json());connOk=true}catch(e){connOk=false}}
+function applyMode(){const live=S.mode=='live';$('mDemo').setAttribute('aria-pressed',!live);$('mLive').setAttribute('aria-pressed',live);$('demoBox').style.display=live?'none':'block';
+ const useCam=live&&S.cam;$('img').hidden=!useCam;$('cv').hidden=!!useCam;if(useCam){$('img').src=S.cam;$('img').onerror=()=>{$('camnote').style.display='block';$('camnote').textContent='Camera not reachable. Check the stream address.'};$('img').onload=()=>{$('camnote').style.display='none'}}else $('camnote').style.display='none';
+ $('mixed').style.display=(live&&location.protocol=='https:'&&/^http:/.test(S.url+' '+S.cam))?'block':'none'}
+$('mDemo').onclick=()=>{S.mode='demo';applyMode()};$('mLive').onclick=()=>{S.mode='live';applyMode()};
+$('save').onclick=()=>{S.url=$('durl').value.trim();S.cam=$('curl').value.trim();try{localStorage.setItem('sentinel_cfg',JSON.stringify(S))}catch(e){}applyMode();connect();log(S.mode=='live'?'Connecting to the device.':'Using demo data.')};
+$('durl').value=S.url||'';$('curl').value=S.cam||'';
+applyMode();connect();show();log('System ready.');
+setInterval(()=>{if(S.mode=='demo')demoStep();else poll();if(authed)render()},1000);render();
+</script>
 </body>
 </html>
