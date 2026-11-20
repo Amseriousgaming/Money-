@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0c1626">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AI Sentinel Command Center</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&display=swap">
 <style>
-:root{--bg:#eef2f7;--pn:#ffffff;--pn2:#e6ecf4;--tx:#0e1b2c;--mu:#56657d;--bd:#cfd8e6;--ok:#0f8f6a;--wn:#b9770a;--al:#c62828;--ac:#0b7c9c;--tint:var(--ok);
+:root{--bg:#0c1626;--pn:#13233a;--pn2:#1a2f4c;--tx:#e8eff9;--mu:#8fa3bf;--bd:#27405f;--ok:#2fd1a0;--wn:#ffb02e;--al:#ff5a5a;--ac:#38c6e8;--tint:var(--ok);color-scheme:dark;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1626;--pn:#13233a;--pn2:#1a2f4c;--tx:#e8eff9;--mu:#8fa3bf;--bd:#27405f;--ok:#2fd1a0;--wn:#ffb02e;--al:#ff5a5a;--ac:#38c6e8}}
-:root[data-theme="dark"]{--bg:#0c1626;--pn:#13233a;--pn2:#1a2f4c;--tx:#e8eff9;--mu:#8fa3bf;--bd:#27405f;--ok:#2fd1a0;--wn:#ffb02e;--al:#ff5a5a;--ac:#38c6e8}
 *,*::before,*::after{box-sizing:inherit}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html{background:#0c1626;scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
 button,input{font:inherit;color:inherit}
 button{cursor:pointer;border:1px solid var(--bd);background:var(--pn);border-radius:10px;padding:10px 14px;min-height:44px}
@@ -24,8 +24,8 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--ac);outline-off
 input{width:100%;padding:12px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);min-height:44px}
 .pri{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:600}
 #app{display:none;max-width:720px;margin:0 auto;padding:12px 14px 40px}
-header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 0 12px}
-header h2{margin:0;font-size:19px;font-family:"IBM Plex Sans Condensed",system-ui,sans-serif;font-weight:700}
+header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 10px;padding:6px 0 12px}
+header h2{white-space:nowrap;margin:0;font-size:19px;font-family:"IBM Plex Sans Condensed",system-ui,sans-serif;font-weight:700}
 .conn{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--mu)}
 .dot{width:10px;height:10px;border-radius:50%;background:var(--mu)}
 .conn.live .dot{background:var(--ok)}.conn.off .dot{background:var(--al)}.conn.demo .dot{background:var(--wn)}
@@ -60,6 +60,27 @@ label{display:grid;gap:4px;margin:10px 0;color:var(--mu);font-size:14px}
 pre{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:10px;overflow-x:auto;font-size:12.5px}
 .warnbox{background:color-mix(in srgb,var(--wn) 15%,var(--pn));border:1px solid var(--wn);border-radius:10px;padding:8px 12px;font-size:14px;display:none}
 .seg{display:flex;gap:8px}.seg button[aria-pressed="true"]{background:var(--ac);color:#fff;border-color:var(--ac)}
+dialog{border:2px solid var(--wn);border-radius:18px;padding:0;width:calc(100vw - 20px);max-width:560px;max-height:calc(100dvh - 20px);overflow:auto;background:var(--pn);color:var(--tx);box-shadow:0 24px 70px rgba(0,0,0,.55)}
+dialog.alert{border-color:var(--al)}dialog[open]{animation:pop .35s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:scale(.8);opacity:0}}
+@media (prefers-reduced-motion:reduce){dialog[open]{animation:none}}
+dialog::backdrop{background:rgba(3,8,16,.72)}
+.dh{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;padding:16px 16px 6px}
+.dh h2{margin:0;font-size:28px;line-height:1.1;color:var(--wn)}dialog.alert .dh h2{color:var(--al)}
+.dh p{margin:4px 0 0;color:var(--mu);font-size:14px}
+.tabs{display:flex;gap:6px;padding:8px 16px 0;flex-wrap:wrap}
+.tabs button[aria-selected="true"]{background:var(--ac);color:#fff;border-color:var(--ac);font-weight:600}
+.pane{padding:12px 16px}
+.ring{position:relative;width:150px;height:150px;margin:2px auto 6px}
+.ring svg{display:block}.ring .rn{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring b{font-size:40px;line-height:1}.ring small{color:var(--mu);font-size:13px}
+#rc{stroke:var(--wn)}dialog.alert #rc{stroke:var(--al)}
+.why{list-style:none;margin:8px 0;padding:0;display:grid;gap:6px}
+.why li{display:flex;justify-content:space-between;gap:10px;background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:8px 12px;font-size:14px}
+.why li.on{border-left:4px solid var(--al)}.why li span{color:var(--mu);text-align:right}
+.dact{display:flex;flex-wrap:wrap;gap:8px;padding:4px 16px 16px}
+.big{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.tile i{font-style:normal;font-size:12px;color:var(--mu);float:right}
 </style>
 </head>
 <body>
@@ -72,6 +93,7 @@ pre{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:1
 <div id="lerr" role="alert" style="color:var(--al);min-height:20px"></div>
 <button class="pri" type="submit">Sign in</button>
 <p style="font-size:13px">Demo sign-in for the exhibition: admin / 1234 (change it at the top of the script).</p>
+<p style="font-size:12px">Version 4. Dark theme only.</p>
 </form>
 </section>
 
@@ -92,7 +114,7 @@ pre{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:1
 </section>
 
 <h3>Camera</h3>
-<div class="cam"><canvas id="cv" width="640" height="360"></canvas><img id="img" alt="Live camera" hidden><div id="camnote"></div></div>
+<div id="camSlot"><div class="cam" id="camBox"><canvas id="cv" width="640" height="360"></canvas><img id="img" alt="Live camera" hidden><div id="camnote"></div></div></div>
 
 <h3>Sensors</h3>
 <div class="grid" id="tiles"></div>
@@ -103,7 +125,7 @@ pre{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:1
 <details id="demoBox"><summary>Demo controls</summary>
 <p style="color:var(--mu);margin:4px 0 10px">Trigger a disaster to show how the system detects, verifies and warns.</p>
 <div class="row" style="padding-bottom:10px">
-<button data-sim="fire" type="button">Fire</button><button data-sim="flood" type="button">Flood</button><button data-sim="quake" type="button">Earthquake</button><button data-sim="gas" type="button">Gas leak</button><button data-sim="" type="button">Reset</button>
+<button data-sim="fire" type="button">Fire</button><button data-sim="flood" type="button">Flood</button><button data-sim="quake" type="button">Earthquake</button><button data-sim="gas" type="button">Gas leak</button><button data-sim="" type="button">Reset</button><button id="rnd" type="button">Surprise me</button>
 </div></details>
 
 <details><summary>Connect the Arduino dev kit</summary>
@@ -120,6 +142,22 @@ pre{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:1
 </details>
 </main>
 
+<dialog id="inc" aria-labelledby="ih">
+<div class="dh"><div><h2 id="ih" class="num">Alert</h2><p id="isub"></p></div><button data-act="dismiss" type="button">Review later</button></div>
+<div class="tabs" role="tablist" aria-label="Incident details">
+<button role="tab" data-tab="o" aria-selected="true" type="button">AI confidence</button>
+<button role="tab" data-tab="v" aria-selected="false" type="button">Camera video</button>
+<button role="tab" data-tab="s" aria-selected="false" type="button">Sensor reports</button></div>
+<div class="pane" id="pane_o">
+<div class="ring"><svg viewBox="0 0 120 120" width="150" height="150" aria-hidden="true"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--bd)" stroke-width="10"/><circle id="rc" cx="60" cy="60" r="52" fill="none" stroke-width="10" stroke-linecap="round" transform="rotate(-90 60 60)" stroke-dasharray="326.7" stroke-dashoffset="326.7"/></svg><div class="rn"><b class="num" id="rv">0%</b><small>AI confidence</small></div></div>
+<p id="isev" style="text-align:center;margin:0 0 6px;font-weight:600"></p>
+<ul class="why" id="why"></ul>
+<div class="big"><button class="pri" data-tab="v" type="button">View camera video</button><button data-tab="s" type="button">View sensor reports</button></div>
+</div>
+<div class="pane" id="pane_v" hidden><div id="camSlot2"></div><p style="color:var(--mu);font-size:14px;margin:8px 0 0">Live view from the camera nearest the incident.</p></div>
+<div class="pane" id="pane_s" hidden><div class="grid" id="ptiles"></div><div class="row" style="margin-top:10px"><button data-act="copy" type="button">Copy report</button></div><pre id="rep"></pre></div>
+<div class="dact" id="iacts"></div>
+</dialog>
 <script>
 const CFG={user:'admin',pin:'1234'};
 const $=id=>document.getElementById(id);
@@ -138,7 +176,7 @@ function log(m,l){logs.unshift({t:stamp(),m,l:l||0});logs=logs.slice(0,8);$('log
 // sign in
 let authed=false;try{authed=sessionStorage.getItem('sentinel_auth')==='1'}catch(e){}
 function show(){$('login').style.display=authed?'none':'flex';$('app').style.display=authed?'block':'none'}
-$('lf').addEventListener('submit',e=>{e.preventDefault();if($('u').value.trim().toLowerCase()===CFG.user&&$('p').value===CFG.pin){authed=true;try{sessionStorage.setItem('sentinel_auth','1')}catch(x){}$('lerr').textContent='';show();log('Operator '+CFG.user+' signed in')}else $('lerr').textContent='Wrong name or PIN. Try again.'});
+$('lf').addEventListener('submit',e=>{e.preventDefault();if($('u').value.trim().toLowerCase()===CFG.user&&$('p').value===CFG.pin){authed=true;unlockAudio();try{sessionStorage.setItem('sentinel_auth','1')}catch(x){}$('lerr').textContent='';show();log('Operator '+CFG.user+' signed in')}else $('lerr').textContent='Wrong name or PIN. Try again.'});
 $('out').onclick=()=>{authed=false;try{sessionStorage.removeItem('sentinel_auth')}catch(e){}show()};
 // tiles
 $('tiles').innerHTML=SENS.map(s=>'<div class="tile" id="t_'+s.k+'"><small>'+s.n+'</small><b class="num" id="v_'+s.k+'">0</b><span>'+s.u+'</span><canvas width="200" height="30" id="s_'+s.k+'"></canvas></div>').join('');
@@ -161,14 +199,54 @@ function render(){const {L,best}=evaluate();const lv=best.lvl;
  if(!lv){$('hstat').textContent='All clear';$('hmsg').textContent='All sensors are normal.';$('src').innerHTML='';approved=false;if(sirenOn)setSiren(false)}
  else{$('hstat').textContent=(lv==2?'Alert: ':'Warning: ')+best.hz.n;$('hmsg').textContent=(best.agree+' of '+best.total+' sources agree. Confidence '+conf+'%.')+(lv==2&&!approved?' Waiting for operator approval.':lv==2?' Citizens are being warned.':'');
   $('src').innerHTML=best.hz.src.map(q=>'<li class="'+(q[1]?'on':'')+'">'+q[0]+(q[1]?' detected':' normal')+'</li>').join('')}
- const a=$('acts');let h='';if(lv==2&&!approved)h='<button class="pri" id="bA" type="button">Approve and warn citizens</button>';else if(approved||sirenOn)h='<button id="bS" type="button">'+(sirenOn?'Stop siren':'Start siren')+'</button><button id="bD" type="button">Stand down</button>';
- if(a.dataset.h!==h){a.innerHTML=h;a.dataset.h=h;if($('bA'))$('bA').onclick=()=>{approved=true;setSiren(true);log('Operator approved. Siren on, citizens notified by SMS and app.',2);render()};if($('bS'))$('bS').onclick=()=>{setSiren(!sirenOn);render()};if($('bD'))$('bD').onclick=()=>{approved=false;setSiren(false);sim=null;log('Operator stood down the alert.');render()}}
+ const a=$('acts'),h=actsHTML(lv,true);if(a.dataset.h!==h){a.innerHTML=h;a.dataset.h=h}
+ incident(lv,best,conf,L);
  if(lv!==lastLvl){if(lv==1)log('Warning: '+best.hz.n+' signs detected ('+best.agree+' of '+best.total+' sources).',1);if(lv==2)log('Alert: '+best.hz.n+' verified at '+conf+'% confidence. Operator review needed.',2);lastLvl=lv}
  const c=$('conn');c.className='conn '+(S.mode=='demo'?'demo':connOk?'live':'off');$('connt').textContent=S.mode=='demo'?'Demo data':connOk?'Live device':'Device offline'}
 // siren
 let actx,osc,sirT;
 function setSiren(on){if(on===sirenOn)return;sirenOn=on;try{if(on){actx=actx||new (window.AudioContext||window.webkitAudioContext)();osc=actx.createOscillator();const g=actx.createGain();g.gain.value=.07;osc.type='sawtooth';osc.connect(g);g.connect(actx.destination);osc.start();sirT=setInterval(()=>{osc.frequency.value=650+Math.abs(Math.sin(Date.now()/420))*550},60)}else{clearInterval(sirT);if(osc)osc.stop();osc=null}}catch(e){}
  if(S.mode=='live'&&S.url&&/^https?:/.test(S.url))fetch(S.url.replace(/\/$/,'')+'/siren?on='+(on?1:0),{mode:'no-cors'}).catch(()=>{})}
+// incident pop-up
+const LOCS={Fire:'Zone B, Watch tower 07','Flood':'Zone C, River gauge 03','Earthquake':'Zone A, Seismic node 01','Gas leak':'Zone D, Gas node 05'};
+const SRCK={'Smoke':'smoke','Temperature':'temp','Water level':'water','Rainfall':'rain','Ground vibration':'vib','Gas sensor':'gas'};
+const dlg=$('inc'),camBox=$('camBox');let inc=null,standDown=false,ringV=0,ringRaf=0,curTab='o';
+$('ptiles').innerHTML=SENS.map(x=>'<div class="tile" id="p_'+x.k+'"><small>'+x.n+'<i id="pl_'+x.k+'"></i></small><b class="num" id="pv_'+x.k+'">0</b><span>'+x.u+'</span><canvas width="200" height="30" id="ps_'+x.k+'"></canvas></div>').join('');
+function unlockAudio(){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();if(actx.resume)actx.resume()}catch(e){}}
+function beep(){try{unlockAudio();const o=actx.createOscillator(),g=actx.createGain();o.type='square';o.connect(g);g.connect(actx.destination);const t=actx.currentTime;g.gain.setValueAtTime(.001,t);for(let i=0;i<3;i++){g.gain.setValueAtTime(.1,t+i*.28);g.gain.setValueAtTime(.001,t+i*.28+.16);o.frequency.setValueAtTime(i%2?740:980,t+i*.28)}o.start(t);o.stop(t+.9)}catch(e){}try{if(navigator.vibrate)navigator.vibrate([200,100,200,100,300])}catch(e){}}
+function actsHTML(lv,hero){let h='';
+ if(lv==2&&!approved)h+='<button class="pri" data-act="approve" type="button">Approve and warn citizens</button>';
+ else if(approved||sirenOn)h+='<button data-act="siren" type="button">'+(sirenOn?'Stop siren':'Start siren')+'</button><button data-act="stand" type="button">Stand down</button>';
+ else if(lv==1)h+='<button data-act="stand" type="button">Dismiss warning</button>';
+ if(hero&&inc&&!dlg.open)h+='<button data-act="open" type="button">Open incident details</button>';
+ return h}
+function ringTo(v){cancelAnimationFrame(ringRaf);const from=ringV,t0=performance.now(),rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ const f=now=>{const k=rm?1:Math.min(1,(now-t0)/900),e=1-Math.pow(1-k,3);ringV=from+(v-from)*e;$('rv').textContent=Math.round(ringV)+'%';$('rc').setAttribute('stroke-dashoffset',(326.7*(1-ringV/100)).toFixed(1));if(k<1)ringRaf=requestAnimationFrame(f)};ringRaf=requestAnimationFrame(f)}
+function tab(n){curTab=n;['o','v','s'].forEach(k=>{$('pane_'+k).hidden=k!==n});dlg.querySelectorAll('[role=tab]').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===n));(n=='v'?$('camSlot2'):$('camSlot')).appendChild(camBox)}
+function openInc(){if(!dlg.open)dlg.showModal();if(inc){inc.dismissed=false;inc.lastConf=-1}ringV=0;tab('o');lastBest&&updateInc(lastBest.lv,lastBest.best,lastBest.conf)}
+let lastBest=null;
+function sev(lv,conf){return lv==2?(conf>=90?'Critical':'High'):'Moderate'}
+function srcDetail(q){const k=SRCK[q[0]];if(!k)return q[1]?'Flame pattern seen':'No fire pattern';const s=SENS.find(x=>x.k==k);return (+D[k]).toFixed(s.d)+' '+s.u+(q[1]==2?' (over '+s.a+')':q[1]==1?' (over '+s.w+')':' (normal)')}
+function reportText(){const e=lastBest;if(!e)return'';const b=e.best;return ['AI Sentinel incident report','Time: '+new Date().toLocaleString(),'Type: '+b.hz.n,'Place: '+LOCS[b.hz.n],'Status: '+(e.lv==2?'Alert':'Warning'),'AI confidence: '+e.conf+'%','Severity: '+sev(e.lv,e.conf),'Sources agreeing: '+b.agree+' of '+b.total,'',...SENS.map(x=>x.n+': '+(+D[x.k]).toFixed(x.d)+' '+x.u),'','Operator action: '+(approved?'Approved. Siren and citizen alerts sent.':'Waiting for approval.')].join('\n')}
+function updateInc(lv,best,conf){lastBest={lv,best,conf};const n=best.hz.n;dlg.classList.toggle('alert',lv==2);$('ih').textContent=(lv==2?'Alert: ':'Warning: ')+n;$('isub').textContent=LOCS[n]+'. Detected at '+new Date(inc?inc.t0:Date.now()).toLocaleTimeString()+'.';
+ $('isev').textContent='Severity: '+sev(lv,conf)+(approved?'. Citizens are being warned.':'');
+ if(inc&&inc.lastConf!==conf){inc.lastConf=conf;ringTo(conf)}
+ $('why').innerHTML=best.hz.src.map(q=>'<li class="'+(q[1]?'on':'')+'"><b>'+q[0]+'</b><span>'+srcDetail(q)+'</span></li>').join('');
+ $('iacts').innerHTML=actsHTML(lv,false);
+ if(curTab=='s'){SENS.forEach(x=>{const l=level(D[x.k],x);$('p_'+x.k).className='tile'+(l==2?' alert':l==1?' warn':'');$('pv_'+x.k).textContent=(+D[x.k]).toFixed(x.d);$('pl_'+x.k).textContent=['Normal','Warning','Alert'][l];spark($('ps_'+x.k),H[x.k],col(l==2?'--al':l==1?'--wn':'--ac'))});$('rep').textContent=reportText()}}
+function incident(lv,best,conf,L){if(lv>0){if(!inc&&!standDown){inc={t0:Date.now(),dismissed:false,lastConf:-1};openInc();beep();log('Pop-up opened: '+best.hz.n.toLowerCase()+' incident.',lv)}if(inc){lastBest={lv,best,conf};if(dlg.open)updateInc(lv,best,conf)}}
+ else{standDown=false;if(inc){inc=null;lastBest=null;if(dlg.open)dlg.close();log('Incident cleared. All sensors are normal.')}}}
+dlg.addEventListener('close',()=>{$('camSlot').appendChild(camBox);if(inc)inc.dismissed=true;render()});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act],[data-tab]');if(!b)return;if(b.dataset.tab){tab(b.dataset.tab);if(lastBest)updateInc(lastBest.lv,lastBest.best,lastBest.conf);return}
+ const a=b.dataset.act;
+ if(a=='approve'){approved=true;setSiren(true);log('Operator approved. Siren on, citizens notified by SMS and app.',2)}
+ else if(a=='siren')setSiren(!sirenOn);
+ else if(a=='stand'){approved=false;setSiren(false);sim=null;standDown=true;inc=null;if(dlg.open)dlg.close();log('Operator stood down the alert.')}
+ else if(a=='open'){openInc();return}
+ else if(a=='dismiss'){dlg.close();return}
+ else if(a=='copy'){try{navigator.clipboard.writeText(reportText()).then(()=>log('Report copied.'))}catch(x){}return}
+ render()});
+$('rnd').onclick=()=>{log('Demo: a sudden incident will start in about 10 seconds.');setTimeout(()=>{const ty=['fire','flood','quake','gas'][Math.floor(Math.random()*4)];sim={type:ty,t0:Date.now()};approved=false;log('Demo: sudden '+ty+' incident.')},10000)};
 // demo data
 function demoStep(){const t=sim?(Date.now()-sim.t0)/1000:0;const tg=Object.assign({},BASE);
  if(sim){if(sim.type=='fire'){tg.temp=78;tg.smoke=780}if(sim.type=='flood'){tg.water=85;tg.rain=75}if(sim.type=='quake'){tg.vib=.55}if(sim.type=='gas'){tg.gas=900}}
